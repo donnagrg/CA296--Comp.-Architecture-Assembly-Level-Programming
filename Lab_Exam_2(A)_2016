@@ -38,10 +38,10 @@ sum	DWORD 0
 .code
 	main:nop
 
-		push offset data_a			;[ebp + 20]
-		push len_indices			  ;[ebp + 16]						# M
+		push offset data_a		;[ebp + 20]
+		push len_indices		;[ebp + 16]						# M
 		push offset indices_a		;[ebp + 12]	
-		push sum					      ;[ebp + 8]        #not used, have sum variable in function
+		push sum			;[ebp + 8]        #not used, have sum variable in function
 		call total					
 
 		invoke writeInteger, eax
@@ -63,21 +63,21 @@ i		DWORD	0
 		push ebp		;[ebp + 4]
 		mov ebp, esp
 		mov ecx, 0
-	loopy:											    ;def loopy():			
-		mov ebx, i									  ;	ebx = i
-		cmp ebx, [ebp + 16]						;	if(i == M):
-		je done										    ;		done()
+	loopy:				;def loopy():			
+		mov ebx, i		;	ebx = i
+		cmp ebx, [ebp + 16]	;	if(i == M):
+		je done			;		done()
 		
-		sal ebx, 2									  ;i = i*4
-		add ebx, [ebp+12]							;ebx += offset indices_a				;start/first position of array
-		mov ecx, [ebx]								;ecx = indices_a[i]						
+		sal ebx, 2		;i = i*4
+		add ebx, [ebp+12]	;ebx += offset indices_a		;start/first position of array
+		mov ecx, [ebx]		;ecx = indices_a[i]						
 
-		sal ecx, 2				  					;ecx = ecx*4							       ;index for data_a
-		add ecx, [ebp+20]							;ecx += offset data_a
-		mov eax, [ecx]								;eax = data_a[ecx]
-		add sum, eax                  ;sum += eax
+		sal ecx, 2		;ecx = ecx*4				;index for data_a
+		add ecx, [ebp+20]	;ecx += offset data_a
+		mov eax, [ecx]		;eax = data_a[ecx]
+		add sum, eax            ;sum += eax
 
-		inc i                         ;i += 1
+		inc i                   ;i += 1
 		jmp loopy
 
 	done:
