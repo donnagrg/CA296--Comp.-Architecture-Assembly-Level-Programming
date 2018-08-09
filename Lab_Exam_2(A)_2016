@@ -61,29 +61,28 @@ i		DWORD	0
 .code
 	total:
 		push ebp		;[ebp + 4]
-		mov ebp, esp
-		mov ecx, 0
+		mov ebp, esp		;ebp = esp
 	loopy:				;def loopy():			
 		mov ebx, i		;	ebx = i
 		cmp ebx, [ebp + 16]	;	if(i == M):
 		je done			;		done()
 		
-		sal ebx, 2		;i = i*4
-		add ebx, [ebp+12]	;ebx += offset indices_a		;start/first position of array
-		mov ecx, [ebx]		;ecx = indices_a[i]						
+		sal ebx, 2		;	i = i*4
+		add ebx, [ebp+12]	;	ebx += offset indices_a		;start/first position of array
+		mov ecx, [ebx]		;	ecx = indices_a[i]						
 
-		sal ecx, 2		;ecx = ecx*4				;index for data_a
-		add ecx, [ebp+20]	;ecx += offset data_a
-		mov eax, [ecx]		;eax = data_a[ecx]
-		add sum, eax            ;sum += eax
+		sal ecx, 2		;	ecx = ecx*4				;index for data_a
+		add ecx, [ebp+20]	;	ecx += offset data_a
+		mov eax, [ecx]		;	eax = data_a[ecx]
+		add sum, eax            ;	sum += eax
 
-		inc i                   ;i += 1
-		jmp loopy
+		inc i                   ;	i += 1
+		jmp loopy		;	loopy()
 
-	done:
-		mov eax, sum
-		mov esp, ebp
-		pop ebp
+	done:				;def done():
+		mov eax, sum		;eax = sum
+		mov esp, ebp		;esp = ebp	
+		pop ebp			
 		ret 16
 
 end
