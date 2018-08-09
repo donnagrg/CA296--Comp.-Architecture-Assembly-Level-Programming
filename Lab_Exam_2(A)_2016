@@ -1,0 +1,89 @@
+;
+; CA296 Console Template
+; Version 1
+;
+
+;
+; Preamble
+;
+
+.586
+.model flat,stdcall
+.stack 4096
+option casemap:none
+
+include     p:\masm32\include\windows.inc
+include     p:\masm32\include\kernel32.inc
+include		p:\masm32\include\user32.inc
+include		p:\masm32\include\msvcrt.inc
+include		p:\masm32\include\ca296.inc
+
+includelib p:\masm32\lib\ca296.lib
+includelib kernel32.lib
+includelib user32.lib
+includelib msvcrt.lib
+
+
+;
+; Data & Code
+;
+EXTERNDEF total:near
+
+.data
+len_data = 5
+len_indices = 3
+data_a		DWORD	10,-10,2,5,-6
+indices_a	DWORD	1,3,4
+sum	DWORD 0
+.code
+	main:nop
+
+		push offset data_a			;[ebp + 20]
+		push len_indices			  ;[ebp + 16]						# M
+		push offset indices_a		;[ebp + 12]	
+		push sum					      ;[ebp + 8]        #not used, have sum variable in function
+		call total					
+
+		invoke writeInteger, eax
+		invoke Sleep, 500
+		invoke ExitProcess,0
+
+	end main
+
+
+
+total.asm
+EXTERNDEF	total:near
+
+.data
+sum		DWORD	0
+i		DWORD	0
+.code
+	total:
+		push ebp		;[ebp + 4]
+		mov ebp, esp
+		mov ecx, 0
+	loopy:											    ;def loopy():			
+		mov ebx, i									  ;	ebx = i
+		cmp ebx, [ebp + 16]						;	if(i == M):
+		je done										    ;		done()
+		
+		sal ebx, 2									  ;i = i*4
+		add ebx, [ebp+12]							;ebx += offset indices_a				;start/first position of array
+		mov ecx, [ebx]								;ecx = indices_a[i]						
+
+		sal ecx, 2				  					;ecx = ecx*4							       ;index for data_a
+		add ecx, [ebp+20]							;ecx += offset data_a
+		mov eax, [ecx]								;eax = data_a[ecx]
+		add sum, eax                  ;sum += eax
+
+		inc i                         ;i += 1
+		jmp loopy
+
+	done:
+		mov eax, sum
+		mov esp, ebp
+		pop ebp
+		ret 16
+
+end
