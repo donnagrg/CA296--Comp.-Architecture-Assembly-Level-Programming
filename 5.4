@@ -1,0 +1,36 @@
+.586
+.model flat,stdcall
+.stack 4096
+option casemap:none
+
+include     p:\masm32\include\windows.inc
+include     p:\masm32\include\kernel32.inc
+include		p:\masm32\include\user32.inc
+include		p:\masm32\include\msvcrt.inc
+include		p:\masm32\include\ca296.inc
+
+includelib p:\masm32\lib\ca296.lib
+includelib kernel32.lib
+includelib user32.lib
+includelib msvcrt.lib
+
+EXTERNDEF maximum:near
+
+.data
+N		DWORD	5
+data	DWORD	10, -10, 2, 5, -6
+M		DWORD	3
+indices	DWORD	1, 2, 4 
+
+.code
+	main:nop
+
+		push N						;[ebp+20]
+		push offset data			;[ebp+16]
+		push M						;[ebp+12]
+		push offset indices			;[ebp+8]
+		call maximum				;[ebp+4]
+		invoke writeInteger, eax
+		invoke ExitProcess, 0
+
+	end main
