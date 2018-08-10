@@ -1,0 +1,71 @@
+;
+; CA296 Console Template
+; Version 1
+;
+
+;
+; Preamble
+;
+
+.586
+.model flat,stdcall
+.stack 4096
+option casemap:none
+
+include     p:\masm32\include\windows.inc
+include     p:\masm32\include\kernel32.inc
+include		p:\masm32\include\user32.inc
+include		p:\masm32\include\msvcrt.inc
+include		p:\masm32\include\ca296.inc
+
+includelib p:\masm32\lib\ca296.lib
+includelib kernel32.lib
+includelib user32.lib
+includelib msvcrt.lib
+
+
+;
+; Data & Code
+;
+
+.data
+x			DWORD	0
+i			DWORD	0
+lst			DWORD	0 DUP(0)
+j			DWORD	0
+step		DWORD	0
+position	DWORD	0
+four		DWORD	4
+
+.code
+	main:nop
+
+		invoke version
+		invoke readInteger
+		mov x,eax
+		invoke readInteger
+		mov step,eax
+		invoke fillWithRandomValues, offset lst, x,100
+		invoke writeArray, offset lst,x
+
+		l1:
+		mov eax,i
+		mul x
+		mov eax, x
+
+		cmp i, eax
+		je exit
+		mov eax,j                        ;step*j
+		mul step
+		mul four				               ;lst[position] position will ned to be a register soon. position = (s*j)*4
+		mov position,eax
+		mov ebx,position                       ;possibly redundant
+		invoke writeInteger,ebx
+		inc j
+		add i,4
+		jmp l1
+
+		exit:
+		invoke ExitProcess,0
+
+	end main
