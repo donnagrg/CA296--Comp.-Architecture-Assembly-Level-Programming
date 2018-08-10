@@ -1,0 +1,73 @@
+;
+; CA296 Console Template
+; Version 1
+;
+
+;
+; Preamble
+;
+
+.586
+.model flat,stdcall
+.stack 4096
+option casemap:none
+
+include     p:\masm32\include\windows.inc
+include     p:\masm32\include\kernel32.inc
+include		p:\masm32\include\user32.inc
+include		p:\masm32\include\msvcrt.inc
+include		p:\masm32\include\ca296.inc
+
+includelib p:\masm32\lib\ca296.lib
+includelib kernel32.lib
+includelib user32.lib
+includelib msvcrt.lib
+
+
+;
+; Data & Code
+;
+
+.data
+x			DWORD	0
+y			DWORD	1
+counter		DWORD	0
+
+.code
+	main:nop
+		
+		invoke readInteger
+		invoke setPattern, eax
+
+		loopy:
+			invoke readRow, y
+			shl eax, 1
+			mov ebx, y
+			sub ebx, 1
+
+			mov edx, y
+			cmp edx, 32
+			je e
+			jmp g
+		e:
+				mov eax, 0
+		g:
+			invoke writeRow, ebx, eax
+			inc y
+			mov eax, y
+			cmp eax, 33
+			jge loop2
+
+			jmp loopy
+		loop2:
+			mov ebx, counter
+			cmp ebx, 31
+			jge done
+			inc counter
+			mov y, 1
+			invoke Sleep,200
+			jmp loopy
+		done:
+		invoke ExitProcess,0
+
+	end main
