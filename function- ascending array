@@ -65,13 +65,13 @@ i_fin	DWORD	0
 		;sub esp, 8
 		
 		mov eax, 0
-		mov edx, [ebp + 8]							;len
+		mov edx, [ebp + 8]				;len
 		
 		mov eax, edx
 		sub eax, 2
 		mov i_fin, eax
 
-		loopy:										;def loopy():
+		loopy:										  ;def loopy():
 			mov eax, i_fin
 			cmp i, eax								;	if i < len-2:
 			jg done
@@ -83,27 +83,27 @@ i_fin	DWORD	0
 		find_element:								;	def find_element():			#swaps elements
 			mov edx, [ebp + 8]						;		edx = len
 			cmp j, edx								;		if j == len:
-			je loopy								;			loopy()
+			je loopy								  ;			loopy()
 					
 			mov eax, i								;		eax = i	
 			sal eax, 2
-			add eax, [ebp + 12]						;		[eax] is a[i]
+			add eax, [ebp + 12]				;		[eax] is a[i]
 
 			mov ebx, j								;		ebx = 	j
 			sal ebx, 2
-			add ebx, [ebp + 12]						;		[ebx] is a[j]	
+			add ebx, [ebp + 12]				;		[ebx] is a[j]	
 				
 			mov ecx, [ebx]			
-			cmp [eax], ecx							;		if a[i] > a[j]
-			jg swap									;			swap()	
+			cmp [eax], ecx						;		if a[i] > a[j]
+			jg swap										;			swap()	
 			inc j
 			jmp find_element
 
 		swap:
-			mov edx, [eax]							;	tmp = a[i]
+			mov edx, [eax]						;	tmp = a[i]
 			mov ecx, [ebx]
-			mov [eax], ecx							;	a[i] = a[j]	
-			mov [ebx], edx							;	a[j] = tmp
+			mov [eax], ecx						;	a[i] = a[j]	
+			mov [ebx], edx						;	a[j] = tmp
 			inc j
 			jmp find_element
 
